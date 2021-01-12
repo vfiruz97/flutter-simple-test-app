@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+// Colors
 const grey50 = Color(0xFFECEFF1);
 const grey200 = Color(0xFFB0BEC5);
 const blueGrey100 = Color(0xFFCFD8DC);
 const black = Colors.black;
 
+// Styles
 InputDecoration inputDecoration({@required String labelText}) {
   return InputDecoration(
     border: OutlineInputBorder(
