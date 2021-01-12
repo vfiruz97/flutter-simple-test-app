@@ -1,10 +1,12 @@
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:test_task/lang/ru.dart';
 import 'package:test_task/mixins/random_goods.dart';
 import 'package:test_task/mixins/random_img_url.dart';
 import 'package:test_task/mixins/random_price.dart';
 import 'package:test_task/models/order.dart';
+import 'package:test_task/styles/style.dart';
 
 class SecondScreen extends StatefulWidget {
   SecondScreen({@required this.url, @required this.number});
@@ -18,7 +20,7 @@ class SecondScreen extends StatefulWidget {
 
 class _SecondScreenState extends State<SecondScreen> {
   int _totalCount = 0;
-  double _totalPrice = 0.00;
+  double _totalPrice = 0.0;
   final List<Order> _list = [];
 
   @override
@@ -27,7 +29,7 @@ class _SecondScreenState extends State<SecondScreen> {
 
     for (int i = 0; i < widget.number; i++) {
       _list.add(Order(
-          img: getRandomImageUrl(getRandomPrice(min: 0, max: 5)),
+          img: getRandomImageUrl(),
           name: getRandomGoods(),
           count: 0,
           price: getRandomPrice(min: 5, max: 99)));
@@ -82,27 +84,20 @@ class _SecondScreenState extends State<SecondScreen> {
                   vertical: 12.0,
                 ),
                 child: Text(
-                  'Произвольный текст как заголовок',
-                  style: const TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
+                  randomText,
+                  style: s36BoldBlack,
                 ),
               ),
               Container(
-                color: Colors.blueGrey[50],
+                color: grey50,
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.symmetric(
                   horizontal: 10.0,
                 ),
                 child: ListTile(
                   title: Text(
-                    "Дополнительно",
-                    style: const TextStyle(
-                      fontSize: 26.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    addition,
+                    style: s26Bold,
                   ),
                 ),
               ),
@@ -111,7 +106,7 @@ class _SecondScreenState extends State<SecondScreen> {
                   itemCount: _list.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      color: Colors.blueGrey[50],
+                      color: grey50,
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.symmetric(
                         horizontal: 10.0,
@@ -145,7 +140,7 @@ class _SecondScreenState extends State<SecondScreen> {
                                 height: 40.0,
                                 child: FittedBox(
                                   child: FloatingActionButton(
-                                    backgroundColor: Colors.blueGrey[100],
+                                    backgroundColor: blueGrey100,
                                     onPressed: () => setState(() {
                                       if (_list[index].count > 0) {
                                         _list[index].count--;
@@ -154,10 +149,7 @@ class _SecondScreenState extends State<SecondScreen> {
                                     }),
                                     child: Text(
                                       '-',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 36.0,
-                                      ),
+                                      style: s36BoldBlack,
                                     ),
                                   ),
                                 ),
@@ -168,9 +160,7 @@ class _SecondScreenState extends State<SecondScreen> {
                                 ),
                                 child: Text(
                                   "${_list[index].count}",
-                                  style: const TextStyle(
-                                    fontSize: 18.0,
-                                  ),
+                                  style: s18,
                                 ),
                               ),
                               Container(
@@ -178,7 +168,7 @@ class _SecondScreenState extends State<SecondScreen> {
                                 height: 40.0,
                                 child: FittedBox(
                                   child: FloatingActionButton(
-                                    backgroundColor: Colors.blueGrey[50],
+                                    backgroundColor: grey50,
                                     onPressed: () => setState(() {
                                       if (_list[index].count < 20) {
                                         _list[index].count++;
@@ -187,10 +177,7 @@ class _SecondScreenState extends State<SecondScreen> {
                                     }),
                                     child: Text(
                                       '+',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 36.0,
-                                      ),
+                                      style: s36BoldBlack,
                                     ),
                                   ),
                                 ),
@@ -200,10 +187,7 @@ class _SecondScreenState extends State<SecondScreen> {
                               ),
                               Text(
                                 "+ ${_list[index].price.toString()} р.",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
-                                ),
+                                style: s20Bold,
                               ),
                             ],
                           ),
@@ -221,31 +205,26 @@ class _SecondScreenState extends State<SecondScreen> {
                   Positioned(
                     child: Container(
                       decoration: DottedDecoration(
-                        color: Colors.black,
+                        color: black,
                         dash: <int>[5, 10],
                         linePosition: LinePosition.top,
                       ),
                     ),
                   ),
                   Container(
-                    color: Colors.blueGrey[200],
+                    color: grey200,
                     alignment: Alignment.topLeft,
                     child: ListTile(
                       title: Text(
-                        "Дополнительно",
+                        addition,
                         style: const TextStyle(
-                          letterSpacing: 0.5,
                           fontSize: 26.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       trailing: Text(
                         "x${_totalCount}  ${_totalPrice} р.",
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                        style: s22BoldBlack,
                       ),
                     ),
                   ),

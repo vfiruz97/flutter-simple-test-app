@@ -6,3 +6,6 @@ const String enterUrl = "Введите URL";
 const String uncorrectUrl = "Ввели неправильную URL";
 const String enterNum = "Введите число";
 const String uncorrectNum = "Ввели неправильное число";
+
+const String randomText = "Произвольный текст как заголовок";
+const String addition = "Дополнительно";
