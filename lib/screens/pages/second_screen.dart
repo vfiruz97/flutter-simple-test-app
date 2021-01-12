@@ -1,5 +1,8 @@
+import 'package:dotted_decoration/dotted_decoration.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:test_task/mixins/random_goods.dart';
+import 'package:test_task/mixins/random_img_url.dart';
 import 'package:test_task/mixins/random_price.dart';
 import 'package:test_task/models/order.dart';
 
@@ -24,7 +27,7 @@ class _SecondScreenState extends State<SecondScreen> {
 
     for (int i = 0; i < widget.number; i++) {
       _list.add(Order(
-          img: widget.url,
+          img: getRandomImageUrl(getRandomPrice(min: 0, max: 5)),
           name: getRandomGoods(),
           count: 0,
           price: getRandomPrice(min: 5, max: 99)));
@@ -51,7 +54,6 @@ class _SecondScreenState extends State<SecondScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.only(bottom: 10.0),
           width: double.infinity,
           height: double.infinity,
           child: Column(
@@ -60,9 +62,18 @@ class _SecondScreenState extends State<SecondScreen> {
               Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.width * 0.75,
-                child: Image.network(
-                  widget.url,
+                child: CachedNetworkImage(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.width * 0.75,
                   fit: BoxFit.cover,
+                  imageUrl: widget.url,
+                  placeholder: (context, url) => Container(
+                    width: 50.0,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
               Padding(
@@ -72,7 +83,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 ),
                 child: Text(
                   'Произвольный текст как заголовок',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
                     color: Colors.black54,
@@ -88,7 +99,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 child: ListTile(
                   title: Text(
                     "Дополнительно",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 26.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -113,9 +124,13 @@ class _SecondScreenState extends State<SecondScreen> {
                           width: 50.0,
                           height: 50.0,
                           alignment: Alignment.topLeft,
-                          child: Image.network(
-                            _list[index].img,
+                          child: CachedNetworkImage(
+                            width: 50.0,
+                            height: 50.0,
                             fit: BoxFit.cover,
+                            imageUrl: _list[index].img,
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
                         title: Text(_list[index].name),
@@ -131,17 +146,15 @@ class _SecondScreenState extends State<SecondScreen> {
                                 child: FittedBox(
                                   child: FloatingActionButton(
                                     backgroundColor: Colors.blueGrey[100],
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_list[index].count > 0) {
-                                          _list[index].count--;
-                                          calculateCountAndPrice();
-                                        }
-                                      });
-                                    },
+                                    onPressed: () => setState(() {
+                                      if (_list[index].count > 0) {
+                                        _list[index].count--;
+                                        calculateCountAndPrice();
+                                      }
+                                    }),
                                     child: Text(
                                       '-',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 36.0,
                                       ),
@@ -155,7 +168,7 @@ class _SecondScreenState extends State<SecondScreen> {
                                 ),
                                 child: Text(
                                   "${_list[index].count}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18.0,
                                   ),
                                 ),
@@ -166,17 +179,15 @@ class _SecondScreenState extends State<SecondScreen> {
                                 child: FittedBox(
                                   child: FloatingActionButton(
                                     backgroundColor: Colors.blueGrey[50],
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_list[index].count < 20) {
-                                          _list[index].count++;
-                                          calculateCountAndPrice();
-                                        }
-                                      });
-                                    },
+                                    onPressed: () => setState(() {
+                                      if (_list[index].count < 20) {
+                                        _list[index].count++;
+                                        calculateCountAndPrice();
+                                      }
+                                    }),
                                     child: Text(
                                       '+',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 36.0,
                                       ),
@@ -189,7 +200,7 @@ class _SecondScreenState extends State<SecondScreen> {
                               ),
                               Text(
                                 "+ ${_list[index].price.toString()} р.",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20.0,
                                 ),
@@ -205,26 +216,40 @@ class _SecondScreenState extends State<SecondScreen> {
               SizedBox(
                 height: 10.0,
               ),
-              Container(
-                color: Colors.blueGrey[50],
-                alignment: Alignment.topLeft,
-                child: ListTile(
-                  title: Text(
-                    "Дополнительно",
-                    style: TextStyle(
-                      fontSize: 26.0,
-                      fontWeight: FontWeight.bold,
+              Stack(
+                children: [
+                  Positioned(
+                    child: Container(
+                      decoration: DottedDecoration(
+                        color: Colors.black,
+                        dash: <int>[5, 10],
+                        linePosition: LinePosition.top,
+                      ),
                     ),
                   ),
-                  trailing: Text(
-                    "x${_totalCount}  ${_totalPrice} р.",
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  Container(
+                    color: Colors.blueGrey[200],
+                    alignment: Alignment.topLeft,
+                    child: ListTile(
+                      title: Text(
+                        "Дополнительно",
+                        style: const TextStyle(
+                          letterSpacing: 0.5,
+                          fontSize: 26.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      trailing: Text(
+                        "x${_totalCount}  ${_totalPrice} р.",
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
